@@ -1,0 +1,69 @@
+<h1 mat-dialog-title> Create Account </h1>
+<mat-dialog-content>
+    <form [formGroup]="userForm">
+        <mat-form-field>
+            <mat-label> Username </mat-label>
+            <input 
+            matInput
+            required
+            formControlName="username"
+            (blur) = "updateUserErrorMessage()"
+            />
+            @if (userForm.controls['username']) {
+                <mat-error> {{userErrorMessage()}} </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Email </mat-label>
+            <input 
+            placeholder="name@example.com"
+            formControlName="email"
+            (blur) = "updateEmailErrorMessage()"
+            matInput
+            required
+            />
+            @if (userForm.controls['email']) {
+                <mat-error> {{emailErrorMessage()}} </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Password </mat-label>
+            <input 
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            formControlName="password"
+            (blur) = "updatePasswordErrorMessage()"
+            required
+            />
+            <mat-icon matSuffix (click)="hide = !hide">
+                {{hide ? 'visibility_off' : 'visibility'}}
+            </mat-icon>
+            @if (userForm.controls['password']) {
+                <mat-error> {{passwordErrorMessage()}} </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Confirm Password</mat-label>
+            <input 
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            formControlName="confirmPassword"
+            (blur) = "updateConfirmPasswordErrorMessage()"
+            required
+            />
+            <mat-icon matSuffix (click)="hide = !hide">
+                {{hide ? 'visibility_off' : 'visibility'}}
+            </mat-icon>
+            @if (userForm.controls['confirmPassword'] || userForm.hasError('passwordMismatch')) {
+                <mat-error> {{confirmPasswordErrorMessage()}} </mat-error>
+            }
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="openSignIn()"> Already a User? </button>
+    <button mat-button> Create Account </button>
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
+
+

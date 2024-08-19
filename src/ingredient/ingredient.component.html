@@ -1,0 +1,23 @@
+<mat-form-field id="search-food">
+    <mat-label> Food </mat-label>
+    <input matInput>
+</mat-form-field>
+
+@for (foodGroup of tabs; track foodGroup.foodGroupId) {
+    <mat-card>
+        <mat-card-header>
+            <button mat-button class="card-toggle" (click)="toggleContent(foodGroup.foodGroupId)">
+                <mat-card-title> {{foodGroup.foodGroupName}} </mat-card-title>
+            </button>
+        </mat-card-header>
+        @if (foodGroup.visibility) {
+            @for (ingredient of foodGroup.ingredients; track ingredient) {
+                <mat-card-content>
+                    <button mat-button class="food-options">
+                        {{ingredient.ingredientName}}
+                    </button>
+                </mat-card-content>
+            }
+        }
+    </mat-card>
+}
