@@ -1,0 +1,143 @@
+<form class="form-element" [formGroup]="recipeForm">
+    <div class="header" align="end">
+        <button mat-dialog-close class="header-button delete-button">
+            <mat-icon class="material-symbols-rounded">
+                close
+            </mat-icon>
+        </button>
+    </div>
+        <h1 mat-dialog-title> 
+                <input
+                placeholder="Add Recipe Name"
+                id="recipe-name" 
+                type="text" 
+                font-size="24pt"
+                formControlName="recipename"> 
+        </h1>
+        <div class="recipe-info"> 
+            <div class="left-side-header">
+                <b> Author(s): </b> 
+                <input
+                    placeholder="Author Name"
+                    id="author-name"
+                    type="text"
+                    formControlName="author"
+                >
+            </div>
+            <div class="right-side-header">
+                <b> Estimated Cook Time: </b> 
+                <input
+                    id="cook-time"
+                    class="number-input"
+                    type="number"
+                    formControlName="cooktime"
+                >
+                mins
+                &nbsp;
+                <b> Calories Per Serving: </b>
+                <input
+                    id="calories"
+                    class="number-input"
+                    type="number"
+                    formControlName="calorieperserving"
+                > 
+                &nbsp;
+                <b> Serving Size </b>
+                <input
+                    id="serving-size"
+                    class="number-input"
+                    type="number"
+                    formControlName="servingsize"
+                >
+            </div>
+        </div>
+        <div class="recipe-description"> 
+            <h4> Recipe Description </h4>
+                   <textarea matInput
+                        id="recipe-description"
+                        type="text"
+                        placeholder="Add a story to your recipe!"
+                        maxlength="4000"
+                        #recipedesc
+                        formControlName="recipedescriptions"
+                    > </textarea>  
+                    <span id="recipe-desc-hint" align="end"> {{recipedesc.value.length}}/4000 </span>     
+        </div>
+        <mat-dialog-content class="recipe-content">
+            <div class="left-content column">
+                <h4 class="content-header"> Ingredients </h4>
+                <div class="autocomplete">
+                    <input id="myInput" 
+                    [(ngModel)] = "searchIngredients"
+                    [ngModelOptions]="{standalone: true}"
+                    (input) = "autoComplete()"
+                    (keydown) = "autoCompleteKeyEvent($event)"
+                    type="text" 
+                    placeholder="Add New Ingredient"
+                    [attr.aria-expanded]="isOpen"
+                    >
+                </div>
+                @if (isOpen) {
+                    <ul class="autocomplete-list">
+                        @for (ing of filteredIngredients; track ing.ingredientid) {
+                            @if (highlightedIndex >= 0) {
+                                <li class="autocomplete-ingredient" (click)="selectItem(ing)" #autocompleteItem
+                                [class.highlighted]="ing.ingredientid === filteredIngredients[highlightedIndex].ingredientid">
+                                    {{ ing.ingredientname }}
+                                </li>
+                            } @else {
+                                <li class="autocomplete-ingredient" (click)="selectItem(ing)">
+                                    {{ ing.ingredientname }}
+                                </li>                                
+                            }
+
+                        }
+                    </ul>
+                }
+                <div class="ingredients-list" formArrayName="ingredients">
+                    @for (ingredient of ingredientsArray.controls; track ingredient; let idx=$index) {
+                        <div class="ingredient-item" [formGroupName]="idx">
+                            <div class="ingredient-name">
+                               {{ ingredient.value.ingredientname }}
+                            </div>
+                            <div class="ingredient-info">
+                                <input 
+                                class="number-input ingredient-quantity"    
+                                type="number"
+                                formControlName="quantity"
+                                >       
+                                <select class="select-units" formControlName="units">
+                                    @for (unit of listOfUnits; track unit.unitid) {
+                                        <option [value]="unit.unitid"> {{ unit.unitname }} </option>
+                                    }
+                                </select>
+                                <button class="delete-button" (click)="deleteIngredient(idx)">
+                                    <mat-icon class="delete-icon"> delete </mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    }
+               </div>
+            </div>
+            <div class="right-content column">
+                <h4 class="content-header"> Directions </h4>
+                <br>
+                <textarea matInput
+                id="recipe-directions"
+                type="text"
+                placeholder="Enter Cooking Instructions Here"
+                maxlength="4000"
+                #recipedirections
+                formControlName="recipedirections"
+                > </textarea>  
+                <span id="recipe-desc-hint" align="end"> {{recipedirections.value.length}}/4000 </span>     
+            </div>
+        </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button (click)="test()"> Test </button>
+        <button mat-button (click)="deleteRecipe()" [disabled]="!recipeInfo" > Delete </button>
+        <button mat-button (click)="addRecipe()"> Update </button>
+        <button mat-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+</form>

@@ -1,0 +1,53 @@
+<div class="header" align="end">
+    <button mat-dialog-close class="header-button delete-button">
+        <mat-icon class="material-symbols-rounded">
+            close
+        </mat-icon>
+    </button>
+</div>
+<h1 mat-dialog-title> <b> {{recipeInfo.recipename}} </b> </h1>
+<div class="recipe-info"> 
+    <div class="left-side-header">
+        <b> Author(s): </b> {{ recipeInfo.author }} 
+    </div>
+    <div class="right-side-header">
+        <b> Estimated Cook Time: </b> {{ recipeInfo.cooktime }} mins
+        &nbsp;
+        <b> Calories Per Serving: </b> {{ recipeInfo.calorieperserving }}
+    </div>
+</div>
+<div class="recipe-description"> 
+    <h4> Recipe Description </h4>
+    <p>
+        {{recipeInfo.recipedescription}}
+    </p>
+</div>
+<mat-dialog-content class="recipe-content">
+    <div class="left-content column">
+        <h4 class="content-header"> Ingredients </h4>
+        @for (ingredient of recipeInfo.ingredients; track ingredient.ingredientid) {
+            <div class="ingredient-item">
+                <div class="ingredient-name">
+                    {{ ingredient.ingredientname }}
+                </div>
+                <div class="ingredient-info">
+                    {{ ingredient.quantity }}
+                    {{ ingredient.units.unitname }}
+                </div>
+            </div>
+        }
+    </div>
+    <div class="right-content column">
+        <h4 class="content-header"> Directions </h4>
+        <br>
+        <p style="margin-bottom: 2rem;white-space:pre-wrap;">
+            {{recipeInfo.recipedirections}}
+        </p>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="test()"> Test </button>
+    <button mat-button (click)="OpenEditRecipeDialog()"> Edit Recipe </button>
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

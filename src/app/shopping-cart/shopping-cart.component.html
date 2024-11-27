@@ -1,0 +1,190 @@
+<mat-sidenav-container class="main-page-layout">
+    <mat-sidenav mode="side" class="pantry-info" opened>
+        <h1 class = "page-header"> My Pantry </h1>
+        <div class="pantry-header">
+            <mat-form-field class="searchbar dense-1">
+                <mat-label> Search Ingredient </mat-label>
+                <input  type ="text"
+                        matInput
+                        [formControl]="ingredientControl"
+                        [matAutocomplete]="auto"
+                        (input)="onSearch($event)"
+                        (keydown)="addNewIngredientOnEnter($event)"
+                        >
+                <mat-autocomplete 
+                    #auto="matAutocomplete"
+                    (opened)="onAutocompleteOpened()"
+                    (closed)="onAutoCompleteClosed()"
+                    (scroll)="onScroll($event)"
+                        
+                >
+                    @for (ingredient of displayedIngredients; track ingredient) {
+                        <mat-option [value]="ingredient.ingredientname"> {{ingredient.ingredientname}} </mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+            <button class="shopping-icon" matTooltip="Add Item" (click)="addNewIngredient()">
+                <mat-icon class="material-symbols-rounded"> add </mat-icon>
+            </button>
+            <button class="shopping-icon" matTooltip="Save Changes" (click)="test()">
+                <mat-icon class="material-symbols-rounded"> save </mat-icon>
+            </button>
+        </div>
+        <div class="pantry-items-list">
+            @for (foodGroup of myPantrySubscription; track foodGroup) {
+                <div class="foodgroup-card"> 
+                    <div class="card-header">
+                        <button mat-button class="card-toggle" (click)="toggleContent(foodGroup.foodGroupId)">
+                            <h3> {{foodGroup.foodGroupName}} </h3>
+                        </button>
+                    </div>
+                    @if (foodGroup.visibility) {
+                        @for (pantryitem of foodGroup.ingredients; track pantryitem) {
+                            <div class="pantry-item" (dblclick)="OpenPantryItem(pantryitem)">
+                                {{pantryitem.ingredientname}}
+                                <div class="pantry-item-right-aligned">
+                                    @if (pantryitem.notes) {
+                                        <span class="item-icon message-icon">
+                                            <mat-icon matTooltip="{{pantryitem.notes}}" class="material-symbols-rounded tooltip"> message </mat-icon>
+                                        </span>
+                                    }
+                                    {{pantryitem.quantity}}
+                                    {{pantryitem.units.unitname}}
+                                    <button class="delete-item" matTooltip="Remove Item" (click)="deleteIngredient(pantryitem.ingredientid)">
+                                        <mat-icon class="material-symbols-rounded delete-icon"> delete </mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="shopping-list">
+        <h1 class="page-header"> Shopping List </h1>
+        <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="shopping-list-navbar">
+            <div class="tab-styles">
+                @for (shoppinglist of myShoppingSubscription; track shoppinglist) {
+                    @if (!shoppinglist.iscompleted) {
+                        <a mat-tab-link class="tab-links"
+                        (click)="activeShoppingTab = shoppinglist"
+                        [active]="activeShoppingTab == shoppinglist"> 
+                        <span class ="tab-text"
+                        (dblclick)="EditShoppingLink(shoppinglist)">
+                        @if (shoppinglist.isediting) {
+                          <input
+                          [(ngModel)]="shoppinglist.listname" 
+                          (blur)="stopEditing(shoppinglist)" 
+                          (keydown.enter)="stopEditing(shoppinglist)"
+                          class="tab-edit-input" />
+                        }
+                        @else {
+                          {{shoppinglist.listname}} 
+                        }
+                        </span>
+                        <button class="close-button" (click)="DeleteShoppingLinks(shoppinglist, $event)">
+                          <mat-icon class="material-symbols-rounded close-icon"> close </mat-icon>
+                        </button>
+                      </a>
+                    }
+
+                }                
+            </div>
+            <div class=right-align-tab>
+                <button class="tab-icon" id="add-new-tab" matTooltip="Add New Tab" (click)="addLink()">
+                    <mat-icon class="material-symbols-rounded"> add </mat-icon>
+                </button>
+                <button class="tab-icon" id="view-completed" matTooltip="Review Completed List">
+                    <mat-icon class="material-symbols-rounded close-icon"> menu_book </mat-icon>
+                </button>
+                <div class="completed-list-dropdown">
+                    @for(shoppinglist of myShoppingSubscription; track shoppinglist.listid) {
+                        @if(shoppinglist.iscompleted) {
+                            <div class="completed-list-items">
+                                {{ shoppinglist.listname }} 
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </nav>
+        <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+        <div class="shopping-header">
+            <mat-form-field class="searchbar dense-1">
+                <mat-label> Search Product </mat-label>
+                <input  type ="text"
+                matInput
+                [formControl]="productControl"
+                [matAutocomplete]="auto"
+                (input)="onSearch($event)"
+                (keydown)="AddShoppingItemOnEnter($event)"
+                >
+                <mat-autocomplete 
+                    #auto="matAutocomplete"
+                    (opened)="onAutocompleteOpened()"
+                    (closed)="onAutoCompleteClosed()"
+                    (scroll)="onScroll($event)"
+                        
+                >
+                @for (ingredient of displayedIngredients; track ingredient.ingredientid) {
+                    <mat-option [value]="ingredient.ingredientname"> {{ingredient.ingredientname}} </mat-option>
+                }
+                </mat-autocomplete>
+            </mat-form-field>
+            <button class="shopping-icon" matTooltip="Search" (click)="AddShoppingItem()">
+                <mat-icon class="material-symbols-rounded"> search </mat-icon>
+            </button>
+            <button class="shopping-icon" matTooltip="Update Checklist" (click)="UpdateCheckList()">
+                <mat-icon class="material-symbols-rounded"> update </mat-icon>
+            </button>
+            <button class="shopping-icon" matTooltip="Share List">
+                <mat-icon class="material-symbols-rounded"> share </mat-icon>
+            </button>
+            <button class="shopping-icon" matTooltip="Finish List" (click)="CompleteShoppingList()">
+                <mat-icon class="material-symbols-rounded"> check </mat-icon>
+            </button>
+            <button class="shopping-icon" matTooltip="Online Order">
+                <mat-icon class="material-symbols-rounded"> shopping_cart_checkout </mat-icon>
+            </button>
+        </div>
+        @if (myShoppingSubscription.length == 0) {
+            <div class="profile-frame" >
+                <img id="profile-pic" src="/profile-pics/Bird.jpg" alt="Birdy" (click)="addLink()">
+                <p> Start a new shopping list! </p>
+            </div>
+        }
+        @else {
+            <div class="shopping-list-content" #shoppingListScroll>
+                @for (shoppingItem of activeShoppingTab.shoppingListItems; track shoppingItem.ingredientid) {
+                    <div class="shopping-item" [ngClass]="shoppingItem.priority.prioritydesc" (dblclick)="OpenShoppingItem(shoppingItem)">
+                        <div class="item-name">
+                            {{shoppingItem.ingredientname}}
+                        </div>
+                        <div class="right-align">
+                            @if (shoppingItem.notes) {
+                                <span class="item-icon message-icon">
+                                    <mat-icon matTooltip="{{shoppingItem.notes}}" class="material-symbols-rounded tooltip"> message </mat-icon>
+                                </span>
+                            }
+                            {{ shoppingItem.price | currency:'USD':'symbol':'1.2-2' }}
+                            {{ shoppingItem.quantity }}
+                            {{ shoppingItem.units.unitname }}
+                            <mat-checkbox [(ngModel)]="shoppingItem.incart" (change)="LogToggle(shoppingItem)"></mat-checkbox>
+                            <button class="item-icon" (click)="DeleteShoppingItem(shoppingItem, $event)">
+                                <mat-icon class="material-symbols-rounded"> delete </mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                }         
+            </div>
+            <div class="total-bar">
+                <h4> Estimated Total </h4>
+                <div class="right-align">
+                    {{ activeShoppingTab.total | currency:'USD':'symbol':'1.2-2'}} 
+                </div>
+            </div>  
+        }   
+    </mat-sidenav-content>
+</mat-sidenav-container>

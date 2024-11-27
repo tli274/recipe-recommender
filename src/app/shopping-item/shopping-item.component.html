@@ -1,0 +1,59 @@
+<h1 mat-dialog-title> {{ shoppingitem.shoppingItem.ingredientname }} </h1>
+<mat-dialog-content>
+    <form [formGroup]="shoppingItemForm">
+        <mat-form-field>
+            <mat-label> Notes </mat-label>
+            <textarea matInput id="notes"
+            #notes
+            name="notes"
+            formControlName="notes"
+            maxlength="200"
+            > 
+            </textarea>
+            <mat-hint align="end"> {{notes.value.length}}/200 </mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Price </mat-label>
+            <input matInput id="price" 
+            min="0"
+            name="price" 
+            type="number"
+            (blur)="formatPrices($event)"
+            formControlName="price"
+            >
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Quantity </mat-label>
+            <input matInput id="quantity" 
+            min="0"
+            step="1"
+            name="quantity" 
+            type="number"
+            (blur)="formatQuantity($event)"
+            formControlName="quantity">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Units </mat-label>
+            <mat-select formControlName="units">
+                @for(unit of unitsList; track unit) {
+                    <mat-option [value]="unit.unitid"> {{unit.unitname}} </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Priority </mat-label>
+            <mat-select formControlName="priority">
+                @for(prio of priorityList; track prio) {
+                    <mat-option [value]="prio.priorityid"> {{prio.prioritydesc}} </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="test()"> Test </button>
+    <button mat-button (click)="UpdateItem()"> Save </button>
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

@@ -1,8 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from '../header/header.component';
-import { IngredientComponent } from '../ingredient/ingredient.component';
-import { PageLayoutComponent } from '../page-layout/page-layout.component'
+import { HeaderComponent } from './header/header.component';
+import { IngredientComponent } from './ingredient/ingredient.component';
+import { PageLayoutComponent } from './page-layout/page-layout.component'
+import { MyPantryService } from '../Service/Pantry/my-pantry.service';
+import { ShoppingCartService } from '../Service/Shopping/shopping-cart.service';
+import { ReferenceService } from '../Service/Reference/reference.service';
+import { ManageRecipeService } from '../Service/Recipe/manage-recipe.service';
+import { AuthenticationService } from '../Service/Authentication/authentication.service';
+import { tokenDto } from '../DTO/token-dto';
 
 @Component({
   selector: 'app-root',
@@ -13,4 +19,32 @@ import { PageLayoutComponent } from '../page-layout/page-layout.component'
 })
 export class AppComponent {
   title = 'recipe-recommender';
+  constructor(
+    private authService: AuthenticationService,
+    private myPantryService: MyPantryService, 
+    private myShoppingService: ShoppingCartService, 
+    private referenceService: ReferenceService,
+    private recipeManagementService: ManageRecipeService
+  ){
+  }
+
+  ngOnInit():void {
+    this.authService.RequestNewAccessToken().subscribe({
+      next: (response: tokenDto) => {
+        this.authService.storeToken(response.accessToken, response.refreshToken);
+        this.referenceService.initializeAllReferences();
+        this.myPantryService.initializePantry();
+        this.myShoppingService.initializeShoppingCart();
+        this.recipeManagementService.InitializeRecipeServices();
+        this.authService.StartTokenRefreshTimer();
+      },
+      error: (err) => {
+        console.log(err); 
+      }
+    })
+  }
+
+  ngOnDestroy(){
+    this.authService.StopTokenRefreshTimer();
+  }
 }

@@ -6,6 +6,9 @@
 /out-tsc
 /bazel-out
 
+# pictures take up space. Add your own
+/src/profile-pics
+
 # Node
 /node_modules
 npm-debug.log

@@ -1,0 +1,22 @@
+
+<h1 mat-dialog-title> Log in </h1>
+<mat-dialog-content>
+    <mat-form-field>
+        <mat-label> Username </mat-label>
+        <input matInput id="username" name="username" [(ngModel)]="userLogin.username">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label> Password </mat-label>
+        <input matInput id="password" name="password" type="password" [(ngModel)]="userLogin.password">
+    </mat-form-field>
+    @if (errorMessage) {
+        <mat-error> {{errorMessage}} </mat-error>
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="openSignUp()"> New Account? </button>
+    <button mat-button (click)="test()"> Forget Password? </button>
+    <button mat-button (click)="loginUser()"> Log-In </button>
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

@@ -1,0 +1,66 @@
+<h1 mat-dialog-title> {{ pantryitem.pantryitem.ingredientname }} </h1>
+<mat-dialog-content>
+    <form [formGroup]="pantryItemForm">
+        <mat-form-field>
+            <mat-label> Notes </mat-label>
+            <textarea matInput id="notes"
+            #notes
+            name="notes"
+            maxlength="200"
+            formControlName="notes"
+            > 
+            </textarea>
+            <mat-hint align="end"> {{notes.value.length}}/200 </mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Quantity </mat-label>
+            <input matInput id="quantity" 
+            min="0"
+            step="1"
+            name="quantity" 
+            type="number"
+            (blur)="formatQuantity($event)"
+            formControlName="quantity"
+            >
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Units </mat-label>
+            <mat-select formControlName="units">
+                @for(unit of unitsList; track unit) {
+                    <mat-option [value]="unit.unitid"> {{unit.unitname}} </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Purchase Date </mat-label>
+            <input matInput 
+            id="purchasedate" 
+            name="purchasedate" 
+            formControlName="purchasedate"
+            [matDatepicker]="purchasepicker"
+            >
+            <mat-hint> MM/DD/YYYY </mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="purchasepicker"></mat-datepicker-toggle>
+            <mat-datepicker #purchasepicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label> Expiration Date </mat-label>
+            <input matInput 
+            id="expirationdate" 
+            name="expirationdate" 
+            formControlName="expirationdate"
+            [matDatepicker]="expirationpicker"
+            >
+            <mat-hint> MM/DD/YYYY </mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="expirationpicker"></mat-datepicker-toggle>
+            <mat-datepicker #expirationpicker></mat-datepicker>
+        </mat-form-field>        
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="test()"> Test </button>
+    <button mat-button (click)="updateItem()" > Save </button>
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

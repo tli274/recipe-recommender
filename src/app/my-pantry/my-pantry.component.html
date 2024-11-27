@@ -1,0 +1,33 @@
+<h1 class="list-header"> My Pantry List </h1>
+
+<mat-form-field class="search-food">
+    <mat-label> Quick Add </mat-label>
+    <input matInput>
+</mat-form-field>
+
+<button mat-fab class="add-ingredients">
+    <mat-icon class="material-symbols-rounded"> Add </mat-icon>
+</button>
+
+<nav mat-tab-nav-bar [tabPanel]="tabPanel" style="display: flex; align-items: center;">
+    <!-- Tabs container, constrained within the available width -->
+    <div style="display: flex; flex-grow: 1; overflow: hidden;">
+      @for (link of links; track link) {
+        <a mat-tab-link
+           style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; max-width: 150px;"
+           (click)="activeLink = link"
+           [active]="activeLink == link">
+           {{ link }}
+        </a>
+      }
+    </div>
+    <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+
+  
+    <!-- Add New Tab Button stays at the end -->
+    <div>
+      <button class="tab-icon" id="add-new-tab" matTooltip="Add New Tab" (click)="addLink()">
+        <mat-icon class="material-symbols-rounded"> add </mat-icon>
+      </button>
+    </div>
+  </nav>

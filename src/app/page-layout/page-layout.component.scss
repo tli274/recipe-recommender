@@ -1,0 +1,31 @@
+.content-layout {
+    display: flex;
+    height: 100%;
+    background-color: #eee;
+}
+
+.recipe-background {
+    background-color: #FCFBD7;
+}
+
+.side-tabs {
+    height: 100%;
+    width: 35px;
+    display: inline-block;
+    position: static;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+}
+
+.routing-apps {
+    flex: 1;
+}
+
+.icon-links {
+    padding: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
+}

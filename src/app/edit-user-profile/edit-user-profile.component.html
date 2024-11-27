@@ -1,0 +1,52 @@
+<h1 mat-dialog-title> Edit Your Profile </h1>
+<mat-dialog-content class="profile-content">
+    <div class="left-content column">
+        <div class="profile-frame" >
+            <img id="profile-pic" src="/profile-pics/catdream.jpg" alt="cat dreams">
+        </div>
+            <div id="display-name" class="center-align">
+                {{userData.displayname}}
+            </div>
+            <div id="phone-number" class="center-align">
+                <a href="tel:{{userData.phonenumber}}"> {{userData.phonenumber}} </a>
+            </div>  
+            <div id="email" class="center-align">
+                <a href="mailto:{{userData.email}}"> {{userData.email}} </a>
+            </div>
+    </div>
+    <div class="right-content column">
+        <form [formGroup]="userProfileInfo">
+            <mat-form-field>
+                <mat-label> Bio </mat-label>
+                <textarea matInput id="bio"
+                #bio
+                name="bio"
+                maxlength="200"
+                > 
+                </textarea>
+                <mat-hint align="end"> {{bio.value.length}}/200 </mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label> First Name </mat-label>
+                <input matInput id="firstname" 
+                name="firstname" 
+                type="text"
+                >
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label> Last Name </mat-label>
+                <input matInput id="lastname" 
+                name="lastname" 
+                type="text"
+                >
+            </mat-form-field>
+
+        </form>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="test()"> Test </button>
+    <button mat-button> Save </button>
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
