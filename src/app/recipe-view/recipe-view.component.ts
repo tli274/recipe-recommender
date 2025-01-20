@@ -10,6 +10,7 @@ import { RecipeResponse } from '../../DTO/ResponseDto/recipe-response';
 import { MatIconModule } from '@angular/material/icon';
 import { EditRecipeComponent } from '../edit-recipe/edit-recipe.component';
 import { RouterModule } from '@angular/router';
+import { RecipeViewDetails } from '../../Models/recipe-view-details';
 
 @Component({
   selector: 'app-recipe-view',
@@ -32,7 +33,7 @@ import { RouterModule } from '@angular/router';
 })
 export class RecipeViewComponent {
   
-  recipeInfo: RecipeResponse = inject(MAT_DIALOG_DATA); 
+  recipeInfo: RecipeViewDetails = inject(MAT_DIALOG_DATA); 
 
   readonly dialog = inject(MatDialog)
 
@@ -44,7 +45,7 @@ export class RecipeViewComponent {
   OpenEditRecipeDialog(){
     const dialogRef = this.dialog.open(EditRecipeComponent, {
       disableClose:true,
-      data: this.recipeInfo,
+      data: this.recipeInfo.recipe,
       width: '80vw',
       maxWidth: '100vw',
       height: '80vh'

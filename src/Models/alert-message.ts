@@ -6,5 +6,6 @@ export interface AlertMessage {
 
 export enum AlertType {
     success,
+    warning,
     error
 }

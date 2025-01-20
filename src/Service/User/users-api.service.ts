@@ -8,11 +8,12 @@ import { MyUserInfo } from '../../Models/my-user-info';
 import { PublicUserInfo } from '../../Models/public-user-info';
 import { FriendResponse } from '../../Models/friend-response';
 import { PendingResponse } from '../../Models/pending-response';
+import { FriendSearchResponseDto } from '../../DTO/ResponseDto/friend-search-reponse-dto';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class UsersApiService {
 
   constructor(private http: HttpClient) { }
 
@@ -27,27 +28,45 @@ export class UsersService {
     return response;
   }
   
-  GetFollowers(): Observable<FriendResponse> {
+  GetFollowers(): Observable<FriendResponse[]> {
     const url = `${this.apiUrl}/GetFollowers`;
-    const response = this.http.get<FriendResponse>(url, {
+    const response = this.http.get<FriendResponse[]>(url, {
       headers: new HttpHeaders({"Content-Type": "application/json"}),
       responseType: 'json'
     })
     return response;
   }
 
-  GetFollowedAccounts(): Observable<FriendResponse> {
+  GetFollowedAccounts(): Observable<FriendResponse[]> {
     const url = `${this.apiUrl}/GetFollowedAccounts`;
-    const response = this.http.get<FriendResponse>(url, {
+    const response = this.http.get<FriendResponse[]>(url, {
       headers: new HttpHeaders({"Content-Type": "application/json"}),
       responseType: 'json'
     })
     return response;
   }
 
-  GetPendingRequest(): Observable<PendingResponse> {
+  GetPendingRequest(): Observable<PendingResponse[]> {
     const url = `${this.apiUrl}/GetPendingRequest`;
-    const response = this.http.get<PendingResponse>(url, {
+    const response = this.http.get<PendingResponse[]>(url, {
+      headers: new HttpHeaders({"Content-Type": "application/json"}),
+      responseType: 'json'
+    })
+    return response;
+  }
+
+  FindUsersLike(searchTerm: string): Observable<FriendSearchResponseDto[]> {
+    const url = `${this.apiUrl}/FindUsersLike/${searchTerm}`;
+    const response = this.http.get<FriendSearchResponseDto[]>(url, {
+      headers: new HttpHeaders({"Content-Type": "application/json"}),
+      responseType: 'json'
+    });
+    return response;
+  }
+
+  FollowNewUser(userid: string){
+    const url = `${this.apiUrl}/FollowRequest/${userid}`
+    const response = this.http.post<any>(url, userid, {
       headers: new HttpHeaders({"Content-Type": "application/json"}),
       responseType: 'json'
     })

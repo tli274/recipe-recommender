@@ -134,7 +134,26 @@
     width: 100%;
 }
 
+.friend-nav-icon {
+    background-color: transparent;
+    border: none;
+}
+
+.friend-nav-icon.accept:hover{
+    color: green;
+}
+
+.friend-nav-icon.reject:hover {
+    color: red;
+}
+
+.friend-nav-icon.friend-request:hover {
+    color: blue;
+}
+
 .friend-list-button {
+    display: flex;
+    justify-content: space-between;
     text-align: left;
     height: 100%;
     width: 100%;

@@ -1,5 +1,5 @@
 export enum FriendType {
-    followed,
+    follows,
     followers,
     pending
 }

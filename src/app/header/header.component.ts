@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SignInComponent } from '../sign-in/sign-in.component';
 import { jwtDecode } from 'jwt-decode'
-import { UsersService } from '../../Service/User/users-api.service';
+import { UsersApiService } from '../../Service/User/users-api.service';
 import { AuthenticationService } from '../../Service/Authentication/authentication.service';
 
 @Component({

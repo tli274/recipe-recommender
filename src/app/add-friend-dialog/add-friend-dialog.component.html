@@ -1,0 +1,29 @@
+<h1 mat-dialog-title> <b> Follow New Account </b> </h1>
+
+<mat-dialog-content>
+    <div class="friend-autocomplete">
+        <mat-form-field class="searchbar dense-1">
+            <mat-label> Search For User </mat-label>
+            <input  type ="text"
+                    matInput
+                    (input)="debounceKeyStrokes()"
+                    [(ngModel)]="searchTerm"
+                    [matAutocomplete]="auto"
+                    />
+            <mat-autocomplete 
+            #auto="matAutocomplete"
+            >
+                @for (user of userList; track user.userid) {
+                    <mat-option [value]="user.username">
+                        {{ user.username }}
+                    </mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="test()"> Test </button>
+    <button mat-button (click)="FollowUser()"> Follow </button>
+    <button mat-button mat-dialog-close> Cancel </button>
+</mat-dialog-actions>

@@ -338,6 +338,7 @@ export class EditRecipeComponent {
       },
       duration: this.durationInSeconds * 1000,
       verticalPosition: 'top',
+      panelClass: panelClass
     })
   }
 

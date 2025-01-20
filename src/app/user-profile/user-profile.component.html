@@ -14,33 +14,75 @@
             </li>
         </nav>
         <div class="friends-list"> 
-            @for(friend of friendsList; track friend) {
-                <ul class="friend-list-item">
-                    @if (this.friendTab == FriendType.followers) {
-                        <button [routerLink]="['/user', friend.friendid]" (click)="test(friend)" class="friend-list-button">
-                            {{friend.username}} 
-                        </button>                        
-                    }
-                    @if (this.friendTab == FriendType.followed) {
-                        <button [routerLink]="['/user', friend.userid]"  (click)="test(friend)" class="friend-list-button">
-                            {{friend.username}} 
+            @if (this.friendTab == FriendType.follows) {
+                @for (followedAccounts of followsList; track followedAccounts) {
+                    <ul class="friend-list-item">
+                        <button [routerLink]="['/user', followedAccounts.friendid]"  (click)="test(followedAccounts)" class="friend-list-button">
+                            <span>
+                                {{followedAccounts.username}} 
+                            </span>
                         </button>  
-                    }
-                    @if (this.friendTab == FriendType.pending) {
-                        <button class="friend-list-button">
-                            {{friend.username}} 
-                        </button>  
-                    }
-                </ul>
+                    </ul>
+                }
+            }
+            @else if (this.friendTab == FriendType.followers) {
+                @for (followers of followersList; track followers) {
+                    <ul class="friend-list-item">
+                        <button [routerLink]="['/user', followers.userid]" (click)="test(followers)" class="friend-list-button">
+                            <span>
+                                {{followers.username}} 
+                            </span>
+                            <span>
+                                <button class="friend-nav-icon friend-request" matTooltip="Follow Back">
+                                    <mat-icon class="material-symbols-outlined"> person_add </mat-icon>
+                                </button>
+                            </span>
+                        </button>     
+                    </ul>
+                }
+            }
+            @else if (this.friendTab == FriendType.pending) {
+                @for (pending of pendingList; track pending) {
+                    <ul class="friend-list-item">
+                        @if (pending.isfollower) {
+                            <button [routerLink]="['/user', pending.userid]" class="friend-list-button">
+                                <span>
+                                    {{pending.username}} 
+                                </span>
+                                <span>
+                                    <button class="friend-nav-icon accept" matTooltip="Accept Request">
+                                        <mat-icon class="material-symbols-outlined"> check </mat-icon>
+                                    </button>
+                                    <button class="friend-nav-icon reject" matTooltip="Decline Request">
+                                        <mat-icon class="material-symbols-outlined"> close </mat-icon>
+                                    </button>
+                                </span>
+                            </button>                            
+                        }
+                        @else {
+                            <button [routerLink]="['/user', pending.friendid]" class="friend-list-button">
+                                <span>
+                                    {{pending.username}} 
+                                </span>
+                                <mat-icon matTooltip="Pending Request" class="material-symbols-outlined"> more_horiz </mat-icon>
+                            </button> 
+                        }
+                    </ul>
+                }
             }
         </div>
         <div class="bottom-tab">
-            <button class="nav-right-align icon-button" matTooltip="Add User">
+            <button class="nav-right-align icon-button" (click)="AddNewFriend()" matTooltip="Add User">
                 <mat-icon class="material-symbols-rounded"> group_add </mat-icon>
             </button>
         </div>
     </mat-sidenav>
     <mat-sidenav-content class="user-info">
+        @if (!isActiveUser()) {
+            <button class="back-arrow" (click)="goBackToMyself()">
+                <mat-icon class="material-symbols-rounded"> arrow_back </mat-icon>
+            </button>
+        }
         <div class="profile-frame" >
             <img id="profile-pic" src="/profile-pics/catdream.jpg" alt="cat dreams">
         </div>

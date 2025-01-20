@@ -1,13 +1,63 @@
 <mat-sidenav-container class="main-page-layout">
     <mat-sidenav mode="side" opened>
-
+        <ul class="patch-version">
+            <div class="version-header">
+                <h2> Version Number </h2>
+            </div>
+            <li class="version-list">
+                @for (patch of patchInfo; track patch.patchVersion; let idx=$index ) {
+                    <button class="version-number" (click)="changePatch(idx)">
+                        Ver. {{ patch.patchVersion | number:'1.3-3'  }}
+                    </button>
+                }
+            </li>
+        </ul>
     </mat-sidenav>
-    <mat-sidenav-content class="patch-info">
+    <mat-sidenav-content class="main-content">
+        <h1 class="header-title"> About Page </h1>
         <p id="overview">
-            user-profile works!
+            Welcome to the pre-alpha version of Local Chef. We still have a lot of work that needs to be done but
+            feel free to play around in this app and make suggestions for improvement at yourlocalchef&#64;gmail.com. 
+            Our team is excited with future updates and changes and hope that you can be a part of it. Subscibe to our email
+            listing if you want to hear when new changes and updates come.
         </p>
-        <div id="patch info">
-            <ul> </ul>
+        <h1 class="header-title"> Patch Notes v.{{currentPatchInfo.patchVersion}} </h1>
+        <nav id="friend-nav" class="nav-list">
+            <li class="nav-item">
+                <button class="about-nav-button"
+                    (click)="renderNewFeatures($event)"
+                > 
+                    New Features 
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="about-nav-button"
+                    (click)="renderBugFixes($event)"
+                > 
+                    Bug Fixes 
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="about-nav-button"
+                    (click)="renderKnownIssues($event)"
+                > 
+                    Known Issues 
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="about-nav-button"
+                    (click)="renderUpcomingChanges($event)"
+                > 
+                    Future Changes 
+                </button>
+            </li>
+        </nav>
+        <div id="patch-info">
+            <ul>
+                @for (info of renderedInfo; track info) {
+                    <li> {{info}} </li>
+                }
+            </ul>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

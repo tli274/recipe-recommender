@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { SignUpComponent } from '../sign-up/sign-up.component';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { UsersService } from '../../Service/User/users-api.service';
+import { UsersApiService } from '../../Service/User/users-api.service';
 import { LoginDto } from '../../DTO/login-dto';
 import { Login } from '../../Models/login';
 import { AuthenticationService } from '../../Service/Authentication/authentication.service';
@@ -14,6 +14,7 @@ import { ShoppingCartService } from '../../Service/Shopping/shopping-cart.servic
 import { MyPantryService } from '../../Service/Pantry/my-pantry.service';
 import { ManageRecipeService } from '../../Service/Recipe/manage-recipe.service';
 import { ReferenceService } from '../../Service/Reference/reference.service';
+import { FriendshipManagementService } from '../../Service/User/friendship-management.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -36,8 +37,8 @@ export class SignInComponent {
     private myPantryService: MyPantryService, 
     private myShoppingService: ShoppingCartService, 
     private referenceService: ReferenceService,
-    private recipeManagementService: ManageRecipeService
-    
+    private recipeManagementService: ManageRecipeService,
+    private friendshipService: FriendshipManagementService,
   ){}
 
   public userLogin: Login = {
@@ -74,6 +75,7 @@ export class SignInComponent {
         this.myShoppingService.initializeShoppingCart();
         this.referenceService.initializeAllReferences();
         this.recipeManagementService.InitializeRecipeServices();
+        this.friendshipService.InitializeAllRelationships();
         this.errorMessage = null;
         this.closeDialog();
       },

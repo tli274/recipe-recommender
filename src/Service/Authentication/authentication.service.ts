@@ -103,6 +103,19 @@ export class AuthenticationService {
     }
   }
 
+  getUserId(): string | null {
+    let accessToken = this.getAccessToken();
+    if (accessToken) {
+      let decodedToken = this.decodeToken(accessToken)
+      if (decodedToken) {
+        return decodedToken.jti
+      } else {
+        return null;
+      }
+    }
+    return null;
+  }
+
   logOut(): void {
     localStorage.removeItem(this.authToken);
     localStorage.removeItem(this.refreshToken)

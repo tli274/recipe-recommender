@@ -12,6 +12,8 @@ import { ShoppingListRequestDto } from '../../DTO/RequestDto/shopping-list-reque
 import { ShoppingItemRequestDto } from '../../DTO/RequestDto/shopping-item-request-dto';
 import { ReferenceService } from '../Reference/reference.service';
 import { UpdatePantryItemRequestDto } from '../../DTO/RequestDto/update-pantry-dto';
+import { AlertMessageService } from '../Misc/alert-message.service';
+import { AlertMessage, AlertType } from '../../Models/alert-message';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +29,7 @@ export class MyPantryService {
   // Reference
   unitMap: Map<number, string> = new Map<number, string>();
 
-  constructor(private pantryApiService: PantryApiService, private referenceService: ReferenceService) { }
+  constructor(private pantryApiService: PantryApiService, private referenceService: ReferenceService, private alertServices: AlertMessageService) { }
 
   // Call api to initialize pantry
   initializePantry() {
@@ -39,6 +41,12 @@ export class MyPantryService {
       },
       error: (err) => {
         console.error(err)
+        let alertData: AlertMessage = {
+          title: 'Network Error',
+          message: 'Was unable to retrieve pantry list on pantry intialization',
+          type: AlertType.success
+        }
+        this.alertServices.openAlertMessage(alertData);
       }
     })
     // Get Food Group List
@@ -49,6 +57,12 @@ export class MyPantryService {
       },
       error: (err) => {
         console.error(err)
+        let alertData: AlertMessage = {
+          title: 'Network Error',
+          message: 'Was unable to retrieve list of food groups on pantry intialization.',
+          type: AlertType.error
+        }
+        this.alertServices.openAlertMessage(alertData)
       }
     })
     // Get Units
@@ -58,6 +72,12 @@ export class MyPantryService {
       },
       error: (err) => {
         console.error(err)
+        let alertData: AlertMessage = {
+          title: 'Nework Error',
+          message: 'Was unable to retrieve units on pantry intialization.',
+          type: AlertType.error
+        }
+        this.alertServices.openAlertMessage(alertData)
       }
     })
   }
@@ -75,7 +95,15 @@ export class MyPantryService {
       })
       if (validIngredient) break;
     }
-    if (validIngredient == null) return;
+    if (validIngredient == null) {
+      let alertData: AlertMessage = {
+        title: 'Resource not found',
+        message: 'No such ingredient found.',
+        type: AlertType.warning
+      }
+      this.alertServices.openAlertMessage(alertData)
+      return;
+    };
 
     // Check if ingredient already in pantry
     let inPantryIngredient = null;
@@ -85,6 +113,11 @@ export class MyPantryService {
       })
       if (inPantryIngredient) { // if pantry item already exist
         foodGroup.visibility = true;
+        let alertData: AlertMessage = {
+          title: 'Resource already exist',
+          message: `Check your pantry. You already have ${inPantryIngredient.ingredientname} in your pantry.`,
+          type: AlertType.warning
+        }
         return;
       }
     }
@@ -129,9 +162,21 @@ export class MyPantryService {
           this.sortedPush(this.myPantryListGroupByFoodId, pantryGroup);
         }
         this.myPantryList.next(this.myPantryListGroupByFoodId)
+        let alertData: AlertMessage = {
+          title: 'Ingredient Added Successfully',
+          message: 'Ingredients ',
+          type: AlertType.success
+        }
+        this.alertServices.openAlertMessage(alertData);
       }),
       error: (err) => {
         console.error(err);
+        let alertData: AlertMessage = {
+          title: 'Failed Pantry Request',
+          message: 'Add pantry item request failed.',
+          type: AlertType.success
+        }
+        this.alertServices.openAlertMessage(alertData)
       }
     });
   }

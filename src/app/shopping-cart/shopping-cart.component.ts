@@ -26,6 +26,7 @@ import { ShoppingItemCheckList } from '../../Models/shopping-item-checks';
 import { ShoppingPantryService } from '../../Service/Shopping/shopping-pantry.service';
 import { ReferenceService } from '../../Service/Reference/reference.service';
 import { UpdatePantryItemRequestDto } from '../../DTO/RequestDto/update-pantry-dto';
+import { AlertMessageService } from '../../Service/Misc/alert-message.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -96,7 +97,13 @@ export class ShoppingCartComponent {
 
   foodGroups: FoodGroups[] = [];
 
-  constructor(private pantryApiService: PantryApiService, private myPantryService: MyPantryService, private myShoppingService: ShoppingCartService, private shoppingPantryService: ShoppingPantryService, private referenceService: ReferenceService){
+  constructor(
+    private pantryApiService: PantryApiService, 
+    private myPantryService: MyPantryService, 
+    private myShoppingService: ShoppingCartService, 
+    private shoppingPantryService: ShoppingPantryService, 
+    private referenceService: ReferenceService, 
+    private alertService: AlertMessageService){
 
   }
 
